@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<yandex>
+
+  <!-- Profiles of settings. -->
+  <profiles>
+    <!-- Default settings. -->
+    <default>
+      <!-- Maximum memory usage for processing single query, in bytes. -->
+      <max_memory_usage>1000000000</max_memory_usage>      <!-- 1 GB -->
+
+      <!-- Use cache of uncompressed blocks of data. Meaningful only for processing many of very short queries. -->
+      <use_uncompressed_cache>0</use_uncompressed_cache>
+
+      <!-- How to choose between replicas during distributed query processing.
+        random - choose random replica from set of replicas with minimum number of errors
+        nearest_hostname - from set of replicas with minimum number of errors, choose replica
+        with minimum number of different symbols between replica's hostname and local hostname
+        (Hamming distance).
+        in_order - first live replica is chosen in specified order.
+        first_or_random - if first replica one has higher number of errors, pick a random one from replicas with minimum number of errors.
+      -->
+      <load_balancing>random</load_balancing>
+    </default>
+
+    <!-- Profile that allows only read (SELECT) queries. -->
+    <readonly>
+      <readonly>1</readonly>
+    </readonly>
+  </profiles>
+
+
+
+  <!-- Quotas. -->
+  <quotas>
+    <!-- Name of quota. -->
+    <default>
+      <!-- Limits for time interval. You could specify many intervals with different limits. -->
+      <interval>
+        <!-- Length of interval. -->
+        <duration>3600</duration>
+        <!-- Averages out to 1 query per 5 seconds. -->
+        <queries>720</queries>
+        <!-- Averages out to 1 error per minute. -->
+        <errors>60</errors>
+        <!-- Averages out to 10 result rows per second. -->
+        <result_rows>36000</result_rows>
+        <!-- No limits. Just calculate resource usage for time interval. -->
+        <read_rows>0</read_rows>
+        <!-- Averages out to 20 seconds of execution per minute. -->
+        <execution_time>1200</execution_time>
+      </interval>
+    </default>
+    <unlimited>
+      <interval>
+        <duration>3600</duration>
+        <queries>0</queries>
+        <errors>0</errors>
+        <result_rows>0</result_rows>
+        <read_rows>0</read_rows>
+        <execution_time>0</execution_time>
+      </interval>
+    </unlimited>
+  </quotas>
+
+
+
+  <!-- Users and ACL. -->
+  <users>
+    <trial_user>
+      <no_password></no_password>
+      <profile>readonly</profile>
+      <quota></quota>
+    </trial_user>
+
+    <testuser>
+      <no_password></no_password>
+      <profile>default</profile>
+      <quota>unlimited</quota>
+    </testuser>
+
+
+    <standard_user>
+      <no_password></no_password>
+      <networks incl="networks" replace="replace">
+        <ip>::/0</ip>
+      </networks>
+      <profile>readonly</profile>
+      <quota>default</quota>
+    </standard_user>
+  </users>
+
+</yandex>

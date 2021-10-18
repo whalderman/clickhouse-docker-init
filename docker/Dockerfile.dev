@@ -1,0 +1,17 @@
+FROM yandex/clickhouse-server:latest
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
+    curl \
+    wget \
+    git
+
+WORKDIR /src
+COPY . .
+
+COPY clickhouse-server/ /etc/clickhouse-server/
+RUN chown -R clickhouse:clickhouse /etc/clickhouse-server
+
+COPY initdb/ /docker-entrypoint-initdb.d/
+RUN chown -R clickhouse:clickhouse /docker-entrypoint-initdb.d
+RUN chmod -R 755 /docker-entrypoint-initdb.d

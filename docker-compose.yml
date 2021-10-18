@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  testdb:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.dev
+    volumes:
+      - .:/src
+    ports:
+      - 8123:8123 # http
+      - 8443:8443 # https
+      - 9000:9000 # ssh
+      - 9100:9100 # grpc (http/2)
+      - 9009:9009 # inter-server replication
+      - 9440:9440 # ssh w/ tls
